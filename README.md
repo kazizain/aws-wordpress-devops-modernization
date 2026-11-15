@@ -76,7 +76,7 @@ The repository will be organized progressively as the project develops.
 
 Planned directories include:
 
-text
+```text
 .
 ├── .github/workflows/    # CI/CD pipelines
 ├── k8s/                  # Kubernetes manifests
@@ -92,7 +92,7 @@ text
 ├── .dockerignore
 ├── .gitignore
 └── README.md
-
+```
 
 Files and directories will be added as their implementation begins.
 
