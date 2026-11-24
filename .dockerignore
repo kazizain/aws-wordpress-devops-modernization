@@ -1,0 +1,13 @@
+.git
+.github
+.gitignore
+.env
+.env.*
+!.env.example
+.vscode
+.DS_Store
+*.log
+*.sql
+*.tar.gz
+README.md
+docs/
