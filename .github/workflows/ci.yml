@@ -35,4 +35,13 @@ jobs:
           image-ref: wordpress-modernized:ci
           format: table
           severity: HIGH,CRITICAL
+          exit-code: '0'
+
+      - name: Fail on fixable HIGH and CRITICAL vulnerabilities
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: wordpress-modernized:ci
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
           exit-code: '1'
