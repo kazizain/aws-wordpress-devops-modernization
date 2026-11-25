@@ -1,0 +1,43 @@
+name: WordPress CD
+
+on:
+  workflow_run:
+    workflows: ["WordPress Docker CI"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_HOST_KEY: ${{ secrets.EC2_HOST_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$EC2_HOST_KEY" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy WordPress to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          ssh -o StrictHostKeyChecking=yes -i ~/.ssh/deploy_key ubuntu@"$EC2_HOST" "DEPLOY_SHA=$DEPLOY_SHA bash -se" <<'REMOTE'
+          set -e
+          cd /home/ubuntu/aws-wordpress-devops-modernization
+          git fetch origin main
+          test "$(git rev-parse origin/main)" = "$DEPLOY_SHA"
+          git merge --ff-only origin/main
+          sudo docker compose up -d --build --no-deps wordpress
+          REMOTE
