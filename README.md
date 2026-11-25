@@ -414,4 +414,48 @@ Automation Engineer / SDET | Cloud & DevOps Learner
 
 ---
 
+## AWS EC2 Deployment
+
+Successfully deployed a containerized WordPress application with MySQL on an AWS EC2 Ubuntu 24.04 server using Docker Compose.
+
+### Architecture
+
+Browser → AWS EC2 (HTTP Port 80) → WordPress Docker Container (Port 8080) → MySQL Docker Container (Port 3306)
+
+### Technology Stack
+
+- AWS EC2 (Ubuntu 24.04, t3.micro)
+- Docker and Docker Compose
+- WordPress with Apache
+- MySQL 8.4
+- Docker named volumes for persistent data
+- Environment-based database configuration
+
+### Deployment Commands
+
+```bash
+sudo docker compose config --quiet
+sudo docker compose up -d --build
+sudo docker compose ps
+```
+
+### Verification
+
+- WordPress image `wordpress-modernized:v6` built successfully.
+- WordPress container running and accessible through HTTP port 80.
+- MySQL container reported healthy.
+- WordPress installation completed and admin dashboard accessed.
+
+### Deployment Evidence
+
+**Docker containers running on AWS EC2**
+
+![Docker Compose containers](docs/screenshots/aws-docker-containers.png)
+
+**WordPress website deployed on AWS EC2**
+
+![WordPress live website](docs/screenshots/aws-wordpress-live.png)
+
+> This deployment demonstrates AWS EC2 and Docker Compose. It does not represent an AKS/Kubernetes deployment.
+
 *This repository documents an individual DevOps learning project developed as part of the Nisum DevOps Enablement Programme.*
